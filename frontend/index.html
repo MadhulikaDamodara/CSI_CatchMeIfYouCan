@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSI – Cache Me If You Can</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Rajdhani:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { box-sizing: border-box; }
+    
+    :root {
+      --neon-cyan: #00f5ff;
+      --neon-magenta: #ff00ff;
+      --neon-blue: #0066ff;
+      --neon-violet: #8b5cf6;
+      --dark-base: #0a0a1a;
+      --dark-navy: #0d1525;
+      --dark-purple: #1a0a2e;
+    }
+    
+    .font-orbitron { font-family: 'Orbitron', monospace; }
+    .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+    
+    /* Neon Text Glow */
+    .neon-text-cyan {
+      color: var(--neon-cyan);
+      text-shadow: 
+        0 0 5px var(--neon-cyan),
+        0 0 10px var(--neon-cyan),
+        0 0 20px var(--neon-cyan),
+        0 0 40px var(--neon-cyan);
+    }
+    
+    .neon-text-magenta {
+      color: var(--neon-magenta);
+      text-shadow: 
+        0 0 5px var(--neon-magenta),
+        0 0 10px var(--neon-magenta),
+        0 0 20px var(--neon-magenta);
+    }
+    
+    .neon-text-violet {
+      color: var(--neon-violet);
+      text-shadow: 
+        0 0 5px var(--neon-violet),
+        0 0 10px var(--neon-violet),
+        0 0 20px var(--neon-violet);
+    }
+    
+    /* Neon Border Glow */
+    .neon-border-cyan {
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 
+        0 0 5px var(--neon-cyan),
+        0 0 10px var(--neon-cyan),
+        inset 0 0 5px rgba(0, 245, 255, 0.1);
+    }
+    
+    .neon-border-magenta {
+      border: 2px solid var(--neon-magenta);
+      box-shadow: 
+        0 0 5px var(--neon-magenta),
+        0 0 10px var(--neon-magenta),
+        inset 0 0 5px rgba(255, 0, 255, 0.1);
+    }
+    
+    .neon-border-violet {
+      border: 2px solid var(--neon-violet);
+      box-shadow: 
+        0 0 5px var(--neon-violet),
+        0 0 10px var(--neon-violet),
+        inset 0 0 5px rgba(139, 92, 246, 0.1);
+    }
+    
+    /* Glassmorphism */
+    .glass-panel {
+      background: rgba(13, 21, 37, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 245, 255, 0.2);
+    }
+    
+    .cyber-glass {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 245, 255, 0.3);
+    }
+    
+    /* Animated Background Grid */
+    .cyber-grid {
+      background-image: 
+        linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+    }
+    
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+    
+    /* Scanline Effect */
+    .scanlines::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.1) 0px,
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+    
+    /* Pulsing Animation */
+    @keyframes pulse-neon {
+      0%, 100% { 
+        box-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+      }
+      50% { 
+        box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-cyan);
+      }
+    }
+    
+    .pulse-active {
+      animation: pulse-neon 2s ease-in-out infinite;
+    }
+    
+    /* Glitch Effect */
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); }
+      92% { transform: translate(-2px, 2px); }
+      94% { transform: translate(2px, -2px); }
+      96% { transform: translate(-2px, -2px); }
+      98% { transform: translate(2px, 2px); }
+    }
+    
+    .glitch-hover:hover {
+      animation: glitch 0.3s ease infinite;
+    }
+    
+    /* Shake Animation */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    /* Float Animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Typing Cursor */
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    
+    .cursor-blink::after {
+      content: '|';
+      animation: blink 1s infinite;
+      color: var(--neon-cyan);
+    }
+    
+    /* Button Styles */
+    .cyber-btn {
+      position: relative;
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-family: 'Orbitron', monospace;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .cyber-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.4), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .cyber-btn:hover::before {
+      left: 100%;
+    }
+    
+    .cyber-btn:hover {
+      box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
+      transform: translateY(-2px);
+    }
+    
+    /* Input Styles */
+    .cyber-input {
+      background: rgba(10, 10, 26, 0.8);
+      border: 2px solid rgba(0, 245, 255, 0.3);
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .cyber-input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 10px rgba(0, 245, 255, 0.1);
+    }
+    
+    .cyber-input::placeholder {
+      color: rgba(0, 245, 255, 0.5);
+    }
+    
+    /* Lock Card States */
+    .lock-card {
+      transition: all 0.5s ease;
+    }
+    
+    .lock-card.locked {
+      filter: brightness(0.5) saturate(0.5);
+    }
+    
+    .lock-card.locked .card-content {
+      filter: blur(2px);
+    }
+    
+    .lock-card.active {
+      animation: pulse-neon 2s ease-in-out infinite;
+    }
+    
+    .lock-card.unlocked {
+      border-color: #00ff88 !important;
+      box-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88, inset 0 0 20px rgba(0, 255, 136, 0.1) !important;
+    }
+    
+    /* Radio Button Custom */
+    .cyber-radio {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .cyber-radio:checked {
+      background: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+    }
+    
+    .cyber-radio:checked::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background: var(--dark-base);
+      border-radius: 50%;
+    }
+    
+    .cyber-radio:hover {
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+    
+    /* Draggable Blocks */
+    .drag-block {
+      cursor: grab;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    
+    .drag-block:active {
+      cursor: grabbing;
+      transform: scale(1.05);
+      box-shadow: 0 0 30px var(--neon-magenta);
+    }
+    
+    .drag-block.dragging {
+      opacity: 0.8;
+      transform: scale(1.1) rotate(2deg);
+    }
+    
+    /* Progress Bar */
+    .progress-fill {
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+      box-shadow: 0 0 10px var(--neon-cyan);
+      transition: width 0.5s ease;
+    }
+    
+    /* Timer Display */
+    .timer-display {
+      font-variant-numeric: tabular-nums;
+    }
+    
+    /* Success/Error Flashes */
+    @keyframes success-flash {
+      0%, 100% { box-shadow: 0 0 20px #00ff88; }
+      50% { box-shadow: 0 0 60px #00ff88, 0 0 100px #00ff88; }
+    }
+    
+    @keyframes error-flash {
+      0%, 100% { box-shadow: 0 0 20px var(--neon-magenta); }
+      50% { box-shadow: 0 0 60px var(--neon-magenta), 0 0 100px var(--neon-magenta); }
+    }
+    
+    .success-glow {
+      animation: success-flash 0.5s ease-in-out 3;
+    }
+    
+    .error-glow {
+      animation: error-flash 0.3s ease-in-out 2;
+    }
+    
+    /* Modal Overlay */
+    .modal-overlay {
+      background: rgba(10, 10, 26, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    
+    /* Hexagon Pattern */
+    .hex-pattern {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2300f5ff' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    /* Countdown urgent */
+    .urgent {
+      color: #ff4444 !important;
+      text-shadow: 0 0 10px #ff4444, 0 0 20px #ff4444 !important;
+      animation: pulse-neon 0.5s ease-in-out infinite !important;
+    }
+    
+    /* Focus warning */
+    .focus-warning {
+      background: linear-gradient(90deg, transparent, rgba(255, 68, 68, 0.3), transparent);
+      animation: warning-pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes warning-pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-[#0a0a1a] text-white overflow-auto">
+  <div id="app" class="min-h-full w-full cyber-grid hex-pattern relative"><!-- Landing Page -->
+   <div id="landing-page" class="min-h-full w-full flex flex-col items-center justify-center p-4 relative"><!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+     <div class="absolute top-20 left-10 w-32 h-32 border border-cyan-500/20 rotate-45 animate-pulse"></div>
+     <div class="absolute bottom-20 right-10 w-40 h-40 border border-magenta-500/20 rotate-12 animate-pulse" style="animation-delay: 1s;"></div>
+     <div class="absolute top-1/3 right-1/4 w-20 h-20 border-2 border-violet-500/20 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+    </div><!-- Event Badge -->
+    <div class="glass-panel px-6 py-2 rounded-full mb-8 float"><span class="font-rajdhani text-sm tracking-widest text-cyan-400" id="event-badge">TECSTASY 2026</span>
+    </div><!-- Main Title -->
+    <div class="text-center mb-6 relative">
+     <h1 class="font-orbitron text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black neon-text-cyan glitch-hover tracking-wider">CACHE ME</h1>
+     <h1 class="font-orbitron text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black neon-text-magenta glitch-hover tracking-wider mt-2">IF YOU CAN</h1><!-- Decorative Lines -->
+     <div class="flex items-center justify-center gap-4 mt-6">
+      <div class="w-16 sm:w-32 h-0.5 bg-gradient-to-r from-transparent to-cyan-500"></div>
+      <div class="w-3 h-3 border-2 border-cyan-500 rotate-45"></div>
+      <div class="w-16 sm:w-32 h-0.5 bg-gradient-to-l from-transparent to-cyan-500"></div>
+     </div>
+    </div><!-- Tagline -->
+    <p class="font-rajdhani text-lg sm:text-xl md:text-2xl text-violet-300 tracking-widest mb-12 text-center px-4" id="tagline-text">Decode the Pattern. Outsmart the Game.</p><!-- Team Input Form -->
+    <div class="w-full max-w-md px-4">
+     <div class="glass-panel p-8 rounded-lg neon-border-cyan"><label class="block font-orbitron text-sm text-cyan-400 mb-3 tracking-wider"> <span class="flex items-center gap-2">
+        <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+        </svg> ENTER TEAM NAME </span> </label> <input type="text" id="team-name-input" class="cyber-input w-full px-4 py-4 rounded text-lg font-rajdhani tracking-wide" placeholder="TEAM_ALPHA_01" maxlength="30"> <button id="start-btn" class="cyber-btn w-full mt-6 py-4 rounded text-lg tracking-widest" onclick="startGame()"> <span class="relative z-10 flex items-center justify-center gap-3">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg> INITIALIZE CHALLENGE </span> </button>
+    </div><!-- Instructions -->
+    <div class="mt-6 text-center">
+     <p class="font-rajdhani text-sm text-gray-400">5 Locks • 10 Minutes • Zero Mercy</p>
+    </div>
+
+    <!-- Winners Panel -->
+    <div class="mt-4 w-full max-w-md px-4">
+     <div class="glass-panel p-4 rounded-lg neon-border-violet">
+      <div class="flex items-center justify-between mb-2">
+       <div>
+        <p class="font-orbitron text-sm text-cyan-400">RECENT WINNERS</p>
+        <p class="font-rajdhani text-xs text-gray-400">Fastest completion times</p>
+       </div>
+       <button onclick="clearWinners()" class="cyber-btn px-3 py-1 rounded text-sm">CLEAR</button>
+      </div>
+      <ul id="winners-list" class="mt-2 space-y-2 text-left text-sm text-gray-200"></ul>
+     </div>
+    </div>
+
+      </div><!-- Corner Decorations -->
+    <div class="absolute top-4 left-4 w-16 h-16 border-l-2 border-t-2 border-cyan-500/50"></div>
+    <div class="absolute top-4 right-4 w-16 h-16 border-r-2 border-t-2 border-cyan-500/50"></div>
+    <div class="absolute bottom-4 left-4 w-16 h-16 border-l-2 border-b-2 border-magenta-500/50"></div>
+    <div class="absolute bottom-4 right-4 w-16 h-16 border-r-2 border-b-2 border-magenta-500/50"></div>
+   </div><!-- Game Dashboard (Hidden Initially) -->
+   <div id="game-dashboard" class="min-h-full w-full hidden"><!-- Top Status Bar -->
+    <div class="sticky top-0 z-50 glass-panel border-b border-cyan-500/30">
+     <div class="max-w-7xl mx-auto px-4 py-3">
+      <div class="flex flex-wrap items-center justify-between gap-4"><!-- Team Info -->
+       <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full neon-border-cyan flex items-center justify-center">
+         <svg class="w-5 h-5 text-cyan-400" fill="currentColor" viewbox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-rajdhani text-xs text-gray-400">TEAM</p>
+         <p class="font-orbitron text-sm text-cyan-400 tracking-wide" id="display-team-name">TEAM_ALPHA</p>
+        </div>
+       </div><!-- Timer Display -->
+       <div class="flex flex-col items-center">
+        <p class="font-rajdhani text-xs text-gray-400 tracking-wider">REMAINING TIME</p>
+        <div class="font-orbitron text-3xl sm:text-4xl font-bold timer-display" id="timer"><span class="neon-text-cyan">10</span> <span class="text-gray-500">:</span> <span class="neon-text-cyan">00</span>
+        </div>
+       </div><!-- Progress Display -->
+       <div class="flex items-center gap-3">
+        <div>
+         <p class="font-rajdhani text-xs text-gray-400 text-right">LOCKS UNLOCKED</p>
+         <p class="font-orbitron text-2xl text-right"><span class="neon-text-magenta" id="locks-solved">0</span> <span class="text-gray-500">/</span> <span class="text-gray-400">5</span></p>
+        </div>
+        <div class="w-10 h-10 rounded neon-border-magenta flex items-center justify-center">
+         <svg class="w-5 h-5 text-magenta-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+         </svg>
+        </div>
+       </div>
+      </div><!-- Progress Bar -->
+      <div class="mt-3 h-2 bg-gray-800 rounded-full overflow-hidden">
+       <div class="progress-fill h-full rounded-full" id="progress-bar" style="width: 0%"></div>
+      </div><!-- Focus Warning Banner -->
+      <div id="focus-warning" class="hidden mt-2 py-2 px-4 rounded focus-warning">
+       <p class="font-rajdhani text-sm text-red-400 text-center flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg> ⚠ FOCUS WARNING: Stay on this tab!</p>
+      </div>
+     </div>
+    </div><!-- Lock Cards Grid -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="locks-grid"><!-- Lock 1: Logic -->
+      <div class="lock-card glass-panel rounded-xl p-6 neon-border-cyan active" data-lock="1" data-status="active">
+       <div class="card-content">
+        <div class="flex items-center justify-between mb-4"><span class="font-orbitron text-xs tracking-widest text-cyan-400">LOCK 01</span>
+         <div class="lock-icon">
+          <svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+          </svg>
+         </div>
+        </div>
+        <h3 class="font-orbitron text-2xl font-bold text-white mb-2">LOGIC</h3>
+        <p class="font-rajdhani text-gray-400 mb-4">Solve the pattern puzzle</p><button class="cyber-btn w-full py-3 rounded text-sm" onclick="openLock(1)"> <span class="relative z-10">ACCESS TERMINAL</span> </button>
+       </div>
+      </div><!-- Lock 2: Code Output -->
+      <div class="lock-card glass-panel rounded-xl p-6 neon-border-violet locked" data-lock="2" data-status="locked">
+       <div class="card-content">
+        <div class="flex items-center justify-between mb-4"><span class="font-orbitron text-xs tracking-widest text-violet-400">LOCK 02</span>
+         <div class="lock-icon">
+          <svg class="w-6 h-6 text-violet-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+          </svg>
+         </div>
+        </div>
+        <h3 class="font-orbitron text-2xl font-bold text-white mb-2">CODE OUTPUT</h3>
+        <p class="font-rajdhani text-gray-400 mb-4">Predict the program result</p><button class="cyber-btn w-full py-3 rounded text-sm opacity-50 cursor-not-allowed" disabled> <span class="relative z-10">🔒 LOCKED</span> </button>
+       </div>
+      </div><!-- Lock 3: Cipher -->
+      <div class="lock-card glass-panel rounded-xl p-6 neon-border-magenta locked" data-lock="3" data-status="locked">
+       <div class="card-content">
+        <div class="flex items-center justify-between mb-4"><span class="font-orbitron text-xs tracking-widest text-pink-400">LOCK 03</span>
+         <div class="lock-icon">
+          <svg class="w-6 h-6 text-pink-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+          </svg>
+         </div>
+        </div>
+        <h3 class="font-orbitron text-2xl font-bold text-white mb-2">CIPHER</h3>
+        <p class="font-rajdhani text-gray-400 mb-4">Decrypt the hidden message</p><button class="cyber-btn w-full py-3 rounded text-sm opacity-50 cursor-not-allowed" disabled> <span class="relative z-10">🔒 LOCKED</span> </button>
+       </div>
+      </div><!-- Lock 4: Block Sequence -->
+      <div class="lock-card glass-panel rounded-xl p-6 neon-border-cyan locked" data-lock="4" data-status="locked">
+       <div class="card-content">
+        <div class="flex items-center justify-between mb-4"><span class="font-orbitron text-xs tracking-widest text-cyan-400">LOCK 04</span>
+         <div class="lock-icon">
+          <svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+          </svg>
+         </div>
+        </div>
+        <h3 class="font-orbitron text-2xl font-bold text-white mb-2">BLOCK SEQUENCE</h3>
+        <p class="font-rajdhani text-gray-400 mb-4">Arrange blocks in order</p><button class="cyber-btn w-full py-3 rounded text-sm opacity-50 cursor-not-allowed" disabled> <span class="relative z-10">🔒 LOCKED</span> </button>
+       </div>
+      </div><!-- Lock 5: MCQ -->
+      <div class="lock-card glass-panel rounded-xl p-6 neon-border-violet locked" data-lock="5" data-status="locked">
+       <div class="card-content">
+        <div class="flex items-center justify-between mb-4"><span class="font-orbitron text-xs tracking-widest text-violet-400">LOCK 05</span>
+         <div class="lock-icon">
+          <svg class="w-6 h-6 text-violet-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+          </svg>
+         </div>
+        </div>
+        <h3 class="font-orbitron text-2xl font-bold text-white mb-2">MCQ</h3>
+        <p class="font-rajdhani text-gray-400 mb-4">Answer the final questions</p><button class="cyber-btn w-full py-3 rounded text-sm opacity-50 cursor-not-allowed" disabled> <span class="relative z-10">🔒 LOCKED</span> </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Lock Modal Overlay -->
+   <div id="lock-modal" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl max-h-[90%] overflow-auto"><!-- Modal Content Container -->
+     <div class="glass-panel rounded-xl neon-border-cyan p-6 relative"><!-- Close Button --> <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full border border-cyan-500/50 flex items-center justify-center hover:bg-cyan-500/20 transition-colors">
+       <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button> <!-- Dynamic Lock Content -->
+      <div id="modal-content"><!-- Content loaded dynamically -->
+      </div>
+     </div>
+    </div>
+   </div><!-- Completion Modal -->
+   <div id="completion-modal" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4">
+    <div class="w-full max-w-lg">
+     <div class="glass-panel rounded-xl p-8 text-center relative overflow-hidden"><!-- Animated Background -->
+      <div class="absolute inset-0 opacity-20">
+       <div class="absolute top-0 left-1/4 w-32 h-32 bg-cyan-500 rounded-full filter blur-3xl animate-pulse"></div>
+       <div class="absolute bottom-0 right-1/4 w-32 h-32 bg-magenta-500 rounded-full filter blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+      </div>
+      <div class="relative z-10"><!-- Trophy Icon -->
+       <div class="w-24 h-24 mx-auto mb-6 rounded-full neon-border-cyan flex items-center justify-center float">
+        <svg class="w-12 h-12 text-cyan-400" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-1.17a3 3 0 01-5.66 0H8.83a3 3 0 01-5.66 0H2a2 2 0 110-4h1.17A3 3 0 015 5zm4 1a1 1 0 10-2 0 1 1 0 002 0zm6 0a1 1 0 10-2 0 1 1 0 002 0z" />
+        </svg>
+       </div>
+       <h2 class="font-orbitron text-3xl font-bold neon-text-cyan mb-4">CHALLENGE COMPLETE</h2>
+       <div class="space-y-4 mb-8">
+        <div class="glass-panel rounded-lg p-4">
+         <p class="font-rajdhani text-gray-400 text-sm">LOCKS SOLVED</p>
+         <p class="font-orbitron text-3xl neon-text-magenta" id="final-locks">5/5</p>
+        </div>
+        <div class="glass-panel rounded-lg p-4">
+         <p class="font-rajdhani text-gray-400 text-sm">TIME TAKEN</p>
+         <p class="font-orbitron text-3xl neon-text-cyan" id="final-time">07:32</p>
+        </div>
+       </div>
+       <p class="font-rajdhani text-xl text-violet-300 mb-6">Thank you for participating in<br><span class="font-orbitron neon-text-cyan">TECSTASY 2026</span></p><button onclick="resetGame()" class="cyber-btn px-8 py-4 rounded-lg text-lg"> <span class="relative z-10">PLAY AGAIN</span> </button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // ==========================================
+    // GAME STATE
+    // ==========================================
+    let gameState = {
+      teamName: '',
+      currentLock: 1,
+      locksSolved: 0,
+      timeRemaining: 600, // 10 minutes in seconds
+      timerInterval: null,
+      isGameActive: false,
+      focusWarnings: 0,
+      startTime: null
+    };
+    
+    // Lock data (simulated - would come from backend in production)
+    const lockData = {
+      1: {
+        type: 'logic',
+        title: 'LOGIC PUZZLE',
+        question: 'What comes next in the sequence?',
+        pattern: '2, 6, 12, 20, 30, ?',
+        answer: '42',
+        hint: 'Look at the differences between consecutive numbers'
+      },
+      2: {
+        type: 'code',
+        title: 'CODE OUTPUT',
+        code: `function mystery(n) {
+  if (n <= 1) return n;
+  return mystery(n-1) + mystery(n-2);
+}
+console.log(mystery(7));`,
+        answer: '13',
+        hint: 'This is a famous sequence'
+      },
+      3: {
+        type: 'cipher',
+        title: 'CIPHER DECODE',
+        cipher: 'WHFVWDB',
+        method: 'Caesar Cipher (Shift: 3)',
+        answer: 'TECSTASY',
+        hint: 'Shift each letter back by 3 positions'
+      },
+      4: {
+        type: 'blocks',
+        title: 'BLOCK SEQUENCE',
+        blocks: ['COMPILE', 'WRITE', 'DEBUG', 'DEPLOY', 'TEST'],
+        correctOrder: ['WRITE', 'COMPILE', 'DEBUG', 'TEST', 'DEPLOY'],
+        hint: 'Think about the software development lifecycle'
+      },
+      5: {
+        type: 'mcq',
+        title: 'FINAL MCQ',
+        question: 'Which data structure uses LIFO (Last In, First Out) principle?',
+        options: ['Queue', 'Stack', 'Array', 'Linked List'],
+        answer: 'Stack',
+        hint: 'Think about a stack of plates'
+      }
+    };
+    
+    // ==========================================
+    // CONFIG & INITIALIZATION
+    // ==========================================
+    const defaultConfig = {
+      event_name: 'TECSTASY 2026',
+      tagline: 'Decode the Pattern. Outsmart the Game.',
+      primary_color: '#00f5ff',
+      secondary_color: '#ff00ff',
+      accent_color: '#8b5cf6',
+      background_color: '#0a0a1a',
+      text_color: '#ffffff'
+    };
+    
+    let config = { ...defaultConfig };
+    
+    async function initializeApp() {
+      if (window.elementSdk) {
+        await window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...defaultConfig, ...newConfig };
+            applyConfig();
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [
+              {
+                get: () => cfg.primary_color || defaultConfig.primary_color,
+                set: (value) => {
+                  cfg.primary_color = value;
+                  window.elementSdk.setConfig({ primary_color: value });
+                }
+              },
+              {
+                get: () => cfg.secondary_color || defaultConfig.secondary_color,
+                set: (value) => {
+                  cfg.secondary_color = value;
+                  window.elementSdk.setConfig({ secondary_color: value });
+                }
+              },
+              {
+                get: () => cfg.accent_color || defaultConfig.accent_color,
+                set: (value) => {
+                  cfg.accent_color = value;
+                  window.elementSdk.setConfig({ accent_color: value });
+                }
+              },
+              {
+                get: () => cfg.background_color || defaultConfig.background_color,
+                set: (value) => {
+                  cfg.background_color = value;
+                  window.elementSdk.setConfig({ background_color: value });
+                }
+              },
+              {
+                get: () => cfg.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  cfg.text_color = value;
+                  window.elementSdk.setConfig({ text_color: value });
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['event_name', cfg.event_name || defaultConfig.event_name],
+            ['tagline', cfg.tagline || defaultConfig.tagline]
+          ])
+        });
+      }
+      applyConfig();
+    }
+    
+    function applyConfig() {
+      // Update event badge
+      const eventBadge = document.getElementById('event-badge');
+      if (eventBadge) eventBadge.textContent = config.event_name || defaultConfig.event_name;
+      
+      // Update tagline
+      const tagline = document.getElementById('tagline-text');
+      if (tagline) tagline.textContent = config.tagline || defaultConfig.tagline;
+      
+      // Update CSS custom properties
+      document.documentElement.style.setProperty('--neon-cyan', config.primary_color || defaultConfig.primary_color);
+      document.documentElement.style.setProperty('--neon-magenta', config.secondary_color || defaultConfig.secondary_color);
+      document.documentElement.style.setProperty('--neon-violet', config.accent_color || defaultConfig.accent_color);
+      document.documentElement.style.setProperty('--dark-base', config.background_color || defaultConfig.background_color);
+    }
+    
+    // ==========================================
+    // GAME FLOW
+    // ==========================================
+    function startGame() {
+      const teamInput = document.getElementById('team-name-input');
+      const teamName = teamInput.value.trim();
+      
+      if (!teamName) {
+        teamInput.classList.add('shake');
+        teamInput.style.borderColor = '#ff4444';
+        setTimeout(() => {
+          teamInput.classList.remove('shake');
+          teamInput.style.borderColor = '';
+        }, 500);
+        return;
+      }
+      
+      gameState.teamName = teamName;
+      gameState.isGameActive = true;
+      gameState.startTime = Date.now();
+      
+      // Update display
+      document.getElementById('display-team-name').textContent = teamName;
+      
+      // Hide landing, show dashboard
+      document.getElementById('landing-page').classList.add('hidden');
+      document.getElementById('game-dashboard').classList.remove('hidden');
+      
+      // Start timer
+      startTimer();
+      
+      // Setup focus detection
+      setupFocusDetection();
+    }
+    
+    function startTimer() {
+      updateTimerDisplay();
+      
+      gameState.timerInterval = setInterval(() => {
+        gameState.timeRemaining--;
+        updateTimerDisplay();
+        
+        if (gameState.timeRemaining <= 0) {
+          endGame(false);
+        }
+      }, 1000);
+    }
+    
+    function updateTimerDisplay() {
+      const minutes = Math.floor(gameState.timeRemaining / 60);
+      const seconds = gameState.timeRemaining % 60;
+      
+      const timerEl = document.getElementById('timer');
+      const isUrgent = gameState.timeRemaining <= 60;
+      
+      timerEl.innerHTML = `
+        <span class="${isUrgent ? 'urgent' : 'neon-text-cyan'}">${String(minutes).padStart(2, '0')}</span>
+        <span class="text-gray-500">:</span>
+        <span class="${isUrgent ? 'urgent' : 'neon-text-cyan'}">${String(seconds).padStart(2, '0')}</span>
+      `;
+    }
+    
+    function setupFocusDetection() {
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && gameState.isGameActive) {
+          gameState.focusWarnings++;
+          showFocusWarning();
+        }
+      });
+    }
+    
+    function showFocusWarning() {
+      const warning = document.getElementById('focus-warning');
+      warning.classList.remove('hidden');
+      
+      setTimeout(() => {
+        warning.classList.add('hidden');
+      }, 5000);
+    }
+    
+    // ==========================================
+    // LOCK INTERACTIONS
+    // ==========================================
+    function openLock(lockNum) {
+      const lock = lockData[lockNum];
+      const modal = document.getElementById('lock-modal');
+      const content = document.getElementById('modal-content');
+      
+      let html = '';
+      
+      switch(lock.type) {
+        case 'logic':
+          html = renderLogicLock(lock, lockNum);
+          break;
+        case 'code':
+          html = renderCodeLock(lock, lockNum);
+          break;
+        case 'cipher':
+          html = renderCipherLock(lock, lockNum);
+          break;
+        case 'blocks':
+          html = renderBlocksLock(lock, lockNum);
+          break;
+        case 'mcq':
+          html = renderMCQLock(lock, lockNum);
+          break;
+      }
+      
+      content.innerHTML = html;
+      modal.classList.remove('hidden');
+      
+      // Initialize drag and drop if blocks lock
+      if (lock.type === 'blocks') {
+        initDragAndDrop(lockNum);
+      }
+    }
+    
+    function closeModal() {
+      document.getElementById('lock-modal').classList.add('hidden');
+    }
+    
+    function renderLogicLock(lock, lockNum) {
+      return `
+        <div class="text-center mb-6">
+          <span class="font-orbitron text-xs tracking-widest text-cyan-400">LOCK 0${lockNum}</span>
+          <h3 class="font-orbitron text-2xl font-bold neon-text-cyan mt-2">${lock.title}</h3>
+        </div>
+        
+        <div class="glass-panel rounded-lg p-6 mb-6">
+          <p class="font-rajdhani text-lg text-gray-300 mb-4">${lock.question}</p>
+          <div class="font-orbitron text-3xl text-center neon-text-magenta tracking-widest py-4">
+            ${lock.pattern}
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="font-rajdhani text-sm text-gray-400 block mb-2">YOUR ANSWER</label>
+          <input type="text" id="answer-input" class="cyber-input w-full px-4 py-3 rounded text-xl font-orbitron text-center" placeholder="?">
+        </div>
+        
+        <div id="feedback-area" class="mb-4 hidden">
+          <div class="p-4 rounded-lg text-center"></div>
+        </div>
+        
+        <button onclick="submitAnswer(${lockNum}, '${lock.answer}')" class="cyber-btn w-full py-4 rounded text-lg">
+          <span class="relative z-10">SUBMIT ANSWER</span>
+        </button>
+        
+        <p class="font-rajdhani text-xs text-gray-500 text-center mt-4">💡 Hint: ${lock.hint}</p>
+      `;
+    }
+    
+    function renderCodeLock(lock, lockNum) {
+      return `
+        <div class="text-center mb-6">
+          <span class="font-orbitron text-xs tracking-widest text-violet-400">LOCK 0${lockNum}</span>
+          <h3 class="font-orbitron text-2xl font-bold neon-text-violet mt-2">${lock.title}</h3>
+        </div>
+        
+        <div class="glass-panel rounded-lg p-4 mb-6 overflow-x-auto">
+          <pre class="font-mono text-sm text-cyan-300 whitespace-pre-wrap"><code>${lock.code}</code></pre>
+        </div>
+        
+        <p class="font-rajdhani text-gray-400 text-center mb-4">What will be the output?</p>
+        
+        <div class="mb-4">
+          <input type="text" id="answer-input" class="cyber-input w-full px-4 py-3 rounded text-xl font-orbitron text-center" placeholder="Enter output">
+        </div>
+        
+        <div id="feedback-area" class="mb-4 hidden">
+          <div class="p-4 rounded-lg text-center"></div>
+        </div>
+        
+        <button onclick="submitAnswer(${lockNum}, '${lock.answer}')" class="cyber-btn w-full py-4 rounded text-lg">
+          <span class="relative z-10">EXECUTE</span>
+        </button>
+        
+        <p class="font-rajdhani text-xs text-gray-500 text-center mt-4">💡 Hint: ${lock.hint}</p>
+      `;
+    }
+    
+    function renderCipherLock(lock, lockNum) {
+      return `
+        <div class="text-center mb-6">
+          <span class="font-orbitron text-xs tracking-widest text-pink-400">LOCK 0${lockNum}</span>
+          <h3 class="font-orbitron text-2xl font-bold neon-text-magenta mt-2">${lock.title}</h3>
+        </div>
+        
+        <div class="glass-panel rounded-lg p-6 mb-6 text-center">
+          <p class="font-rajdhani text-sm text-gray-400 mb-2">ENCRYPTED MESSAGE</p>
+          <div class="font-orbitron text-4xl neon-text-cyan tracking-[0.5em]">
+            ${lock.cipher}
+          </div>
+          <p class="font-rajdhani text-sm text-violet-400 mt-4">${lock.method}</p>
+        </div>
+        
+        <div class="mb-4">
+          <label class="font-rajdhani text-sm text-gray-400 block mb-2">DECODED MESSAGE</label>
+          <input type="text" id="answer-input" class="cyber-input w-full px-4 py-3 rounded text-xl font-orbitron text-center uppercase" placeholder="????????">
+        </div>
+        
+        <div id="feedback-area" class="mb-4 hidden">
+          <div class="p-4 rounded-lg text-center"></div>
+        </div>
+        
+        <button onclick="submitAnswer(${lockNum}, '${lock.answer}')" class="cyber-btn w-full py-4 rounded text-lg">
+          <span class="relative z-10">DECRYPT</span>
+        </button>
+        
+        <p class="font-rajdhani text-xs text-gray-500 text-center mt-4">💡 Hint: ${lock.hint}</p>
+      `;
+    }
+    
+    function renderBlocksLock(lock, lockNum) {
+      const shuffled = [...lock.blocks].sort(() => Math.random() - 0.5);
+      
+      return `
+        <div class="text-center mb-6">
+          <span class="font-orbitron text-xs tracking-widest text-cyan-400">LOCK 0${lockNum}</span>
+          <h3 class="font-orbitron text-2xl font-bold neon-text-cyan mt-2">${lock.title}</h3>
+        </div>
+        
+        <p class="font-rajdhani text-gray-400 text-center mb-6">Drag and arrange the blocks in the correct order</p>
+        
+        <div id="blocks-container" class="space-y-3 mb-6">
+          ${shuffled.map((block, i) => `
+            <div class="drag-block glass-panel neon-border-violet p-4 rounded-lg cursor-grab" draggable="true" data-value="${block}">
+              <div class="flex items-center gap-4">
+                <span class="font-orbitron text-xs text-violet-400">${i + 1}</span>
+                <span class="font-rajdhani text-lg text-white">${block}</span>
+                <svg class="w-5 h-5 text-gray-500 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z"/>
+                </svg>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div id="feedback-area" class="mb-4 hidden">
+          <div class="p-4 rounded-lg text-center"></div>
+        </div>
+        
+        <button onclick="submitBlocksAnswer(${lockNum})" class="cyber-btn w-full py-4 rounded text-lg">
+          <span class="relative z-10">VERIFY SEQUENCE</span>
+        </button>
+        
+        <p class="font-rajdhani text-xs text-gray-500 text-center mt-4">💡 Hint: ${lock.hint}</p>
+      `;
+    }
+    
+    function renderMCQLock(lock, lockNum) {
+      return `
+        <div class="text-center mb-6">
+          <span class="font-orbitron text-xs tracking-widest text-violet-400">LOCK 0${lockNum}</span>
+          <h3 class="font-orbitron text-2xl font-bold neon-text-violet mt-2">${lock.title}</h3>
+        </div>
+        
+        <div class="glass-panel rounded-lg p-6 mb-6">
+          <p class="font-rajdhani text-xl text-white">${lock.question}</p>
+        </div>
+        
+        <div class="space-y-3 mb-6" id="mcq-options">
+          ${lock.options.map((opt, i) => `
+            <label class="block">
+              <div class="glass-panel rounded-lg p-4 cursor-pointer hover:border-cyan-500 transition-all border border-transparent group">
+                <div class="flex items-center gap-4">
+                  <input type="radio" name="mcq-answer" value="${opt}" class="cyber-radio">
+                  <span class="font-rajdhani text-lg text-gray-300 group-hover:text-cyan-400 transition-colors">${opt}</span>
+                </div>
+              </div>
+            </label>
+          `).join('')}
+        </div>
+        
+        <div id="feedback-area" class="mb-4 hidden">
+          <div class="p-4 rounded-lg text-center"></div>
+        </div>
+        
+        <button onclick="submitMCQAnswer(${lockNum}, '${lock.answer}')" class="cyber-btn w-full py-4 rounded text-lg">
+          <span class="relative z-10">SUBMIT ANSWER</span>
+        </button>
+        
+        <p class="font-rajdhani text-xs text-gray-500 text-center mt-4">💡 Hint: ${lock.hint}</p>
+      `;
+    }
+    
+    // ==========================================
+    // DRAG AND DROP
+    // ==========================================
+    function initDragAndDrop(lockNum) {
+      const container = document.getElementById('blocks-container');
+      const blocks = container.querySelectorAll('.drag-block');
+      
+      let draggedEl = null;
+      
+      blocks.forEach(block => {
+        block.addEventListener('dragstart', (e) => {
+          draggedEl = block;
+          block.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        
+        block.addEventListener('dragend', () => {
+          block.classList.remove('dragging');
+          draggedEl = null;
+          updateBlockNumbers();
+        });
+        
+        block.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+        });
+        
+        block.addEventListener('drop', (e) => {
+          e.preventDefault();
+          if (draggedEl && draggedEl !== block) {
+            const allBlocks = [...container.children];
+            const draggedIdx = allBlocks.indexOf(draggedEl);
+            const targetIdx = allBlocks.indexOf(block);
+            
+            if (draggedIdx < targetIdx) {
+              block.after(draggedEl);
+            } else {
+              block.before(draggedEl);
+            }
+          }
+        });
+      });
+    }
+    
+    function updateBlockNumbers() {
+      const container = document.getElementById('blocks-container');
+      const blocks = container.querySelectorAll('.drag-block');
+      blocks.forEach((block, i) => {
+        block.querySelector('.font-orbitron').textContent = i + 1;
+      });
+    }
+    
+    // ==========================================
+    // ANSWER SUBMISSION
+    // ==========================================
+    function submitAnswer(lockNum, correctAnswer) {
+      const input = document.getElementById('answer-input');
+      const userAnswer = input.value.trim().toUpperCase();
+      const isCorrect = userAnswer === correctAnswer.toUpperCase();
+      
+      showFeedback(isCorrect, lockNum);
+    }
+    
+    function submitMCQAnswer(lockNum, correctAnswer) {
+      const selected = document.querySelector('input[name="mcq-answer"]:checked');
+      
+      if (!selected) {
+        const optionsContainer = document.getElementById('mcq-options');
+        optionsContainer.classList.add('shake');
+        setTimeout(() => optionsContainer.classList.remove('shake'), 500);
+        return;
+      }
+      
+      const isCorrect = selected.value === correctAnswer;
+      showFeedback(isCorrect, lockNum);
+    }
+    
+    function submitBlocksAnswer(lockNum) {
+      const container = document.getElementById('blocks-container');
+      const blocks = container.querySelectorAll('.drag-block');
+      const userOrder = [...blocks].map(b => b.dataset.value);
+      const correctOrder = lockData[lockNum].correctOrder;
+      
+      const isCorrect = JSON.stringify(userOrder) === JSON.stringify(correctOrder);
+      showFeedback(isCorrect, lockNum);
+    }
+    
+    function showFeedback(isCorrect, lockNum) {
+      const feedbackArea = document.getElementById('feedback-area');
+      const feedbackDiv = feedbackArea.querySelector('div');
+      
+      feedbackArea.classList.remove('hidden');
+      
+      if (isCorrect) {
+        feedbackDiv.className = 'p-4 rounded-lg text-center neon-border-cyan success-glow';
+        feedbackDiv.innerHTML = `
+          <div class="flex items-center justify-center gap-3">
+            <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span class="font-orbitron text-green-400">LOCK UNLOCKED!</span>
+          </div>
+        `;
+        
+        setTimeout(() => {
+          unlockComplete(lockNum);
+        }, 1500);
+      } else {
+        feedbackDiv.className = 'p-4 rounded-lg text-center neon-border-magenta error-glow shake';
+        feedbackDiv.innerHTML = `
+          <div class="flex items-center justify-center gap-3">
+            <svg class="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            <span class="font-orbitron text-red-400">INCORRECT - TRY AGAIN</span>
+          </div>
+        `;
+        
+        setTimeout(() => {
+          feedbackDiv.classList.remove('shake');
+        }, 500);
+      }
+    }
+    
+    function unlockComplete(lockNum) {
+      gameState.locksSolved++;
+      
+      // Update lock card
+      const lockCard = document.querySelector(`[data-lock="${lockNum}"]`);
+      lockCard.classList.remove('active', 'locked');
+      lockCard.classList.add('unlocked');
+      lockCard.dataset.status = 'unlocked';
+      
+      // Update lock icon to unlocked
+      lockCard.querySelector('.lock-icon').innerHTML = `
+        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z"/>
+        </svg>
+      `;
+      
+      // Update button
+      const btn = lockCard.querySelector('button');
+      btn.innerHTML = '<span class="relative z-10">✓ COMPLETED</span>';
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      
+      // Update progress
+      document.getElementById('locks-solved').textContent = gameState.locksSolved;
+      document.getElementById('progress-bar').style.width = `${(gameState.locksSolved / 5) * 100}%`;
+      
+      closeModal();
+      
+      // Activate next lock
+      if (gameState.locksSolved < 5) {
+        const nextLock = lockNum + 1;
+        const nextLockCard = document.querySelector(`[data-lock="${nextLock}"]`);
+        if (nextLockCard) {
+          nextLockCard.classList.remove('locked');
+          nextLockCard.classList.add('active');
+          nextLockCard.dataset.status = 'active';
+          
+          const nextBtn = nextLockCard.querySelector('button');
+          nextBtn.disabled = false;
+          nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          nextBtn.innerHTML = '<span class="relative z-10">ACCESS TERMINAL</span>';
+          nextBtn.onclick = () => openLock(nextLock);
+        }
+      } else {
+        // All locks completed
+        endGame(true);
+      }
+    }
+    
+    function endGame(completed) {
+      gameState.isGameActive = false;
+      clearInterval(gameState.timerInterval);
+      
+      const timeTaken = 600 - gameState.timeRemaining;
+      const minutes = Math.floor(timeTaken / 60);
+      const seconds = timeTaken % 60;
+      
+      document.getElementById('final-locks').textContent = `${gameState.locksSolved}/5`;
+      document.getElementById('final-time').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      
+      // Save winner record when completed
+      if (completed && gameState.teamName) {
+        saveWinner(gameState.teamName, timeTaken);
+      }
+
+      document.getElementById('completion-modal').classList.remove('hidden');
+    }
+    
+    function resetGame() {
+      // Reset state
+      gameState = {
+        teamName: '',
+        currentLock: 1,
+        locksSolved: 0,
+        timeRemaining: 600,
+        timerInterval: null,
+        isGameActive: false,
+        focusWarnings: 0,
+        startTime: null
+      };
+      
+      // Reset UI
+      document.getElementById('completion-modal').classList.add('hidden');
+      document.getElementById('game-dashboard').classList.add('hidden');
+      document.getElementById('landing-page').classList.remove('hidden');
+      document.getElementById('team-name-input').value = '';
+      
+      // Reset lock cards
+      document.querySelectorAll('.lock-card').forEach((card, i) => {
+        const lockNum = i + 1;
+        card.classList.remove('active', 'unlocked');
+        card.classList.add(lockNum === 1 ? 'active' : 'locked');
+        card.dataset.status = lockNum === 1 ? 'active' : 'locked';
+        
+        // Reset icon
+        card.querySelector('.lock-icon').innerHTML = `
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+          </svg>
+        `;
+        
+        // Reset button
+        const btn = card.querySelector('button');
+        if (lockNum === 1) {
+          btn.innerHTML = '<span class="relative z-10">ACCESS TERMINAL</span>';
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          btn.onclick = () => openLock(1);
+        } else {
+          btn.innerHTML = '<span class="relative z-10">🔒 LOCKED</span>';
+          btn.disabled = true;
+          btn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+      });
+      
+      // Reset progress
+      document.getElementById('locks-solved').textContent = '0';
+      document.getElementById('progress-bar').style.width = '0%';
+    }
+    
+    // Winners storage + UI
+    function saveWinner(teamName, timeTakenSeconds) {
+      try {
+        const raw = localStorage.getItem('csi_winners');
+        const arr = raw ? JSON.parse(raw) : [];
+        const record = {
+          team: teamName,
+          time: timeTakenSeconds,
+          formatted: `${String(Math.floor(timeTakenSeconds/60)).padStart(2,'0')}:${String(timeTakenSeconds%60).padStart(2,'0')}`,
+          date: new Date().toISOString()
+        };
+        arr.push(record);
+        // sort ascending by time (lower is better)
+        arr.sort((a,b)=>a.time - b.time);
+        // keep top 20
+        const trimmed = arr.slice(0,20);
+        localStorage.setItem('csi_winners', JSON.stringify(trimmed));
+        renderWinners();
+      } catch (err) {
+        console.error('saveWinner error', err);
+      }
+    }
+
+    function renderWinners() {
+      const list = document.getElementById('winners-list');
+      if (!list) return;
+      const raw = localStorage.getItem('csi_winners');
+      const arr = raw ? JSON.parse(raw) : [];
+      list.innerHTML = '';
+      if (!arr.length) {
+        list.innerHTML = '<li class="text-gray-500">No winners yet — be the first!</li>';
+        return;
+      }
+      arr.forEach((r, idx) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center justify-between';
+        li.innerHTML = `<span class="font-rajdhani text-sm text-cyan-200">${idx+1}. ${r.team}</span><span class="font-orbitron text-sm text-magenta-300">${r.formatted}</span>`;
+        list.appendChild(li);
+      });
+    }
+
+    function clearWinners() {
+      localStorage.removeItem('csi_winners');
+      renderWinners();
+    }
+
+    // Initialize on load
+    initializeApp();
+    // render winners stored in localStorage
+    renderWinners();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ca4ced187cbf3d0',t:'MTc3MDQ4NzQ0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
